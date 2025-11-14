@@ -16,36 +16,30 @@ async function pdfToMarkdown(buffer) {
     return [
       '# PDF sem texto extraível',
       '',
-      '> Parece ser digitalizado (imagem).',
-      '> Envie as páginas como PNG/JPG para OCR, ou depois ativamos um fluxo de OCR de PDF via GCS.'
+      '> Parece digitalizado (imagem). Envie as páginas como PNG/JPG para OCR,',
+      '> ou depois ativamos o fluxo de OCR de PDF via GCS.'
     ].join('\n');
   }
-  return text
-    .replace(/\r/g, '')
-    .split('\n\n')
-    .map(p => p.trim())
-    .filter(Boolean)
-    .map(p => p.replace(/\n/g, ' '))
-    .join('\n\n');
+  return text.replace(/\r/g,'')
+             .split('\n\n')
+             .map(p=>p.trim()).filter(Boolean)
+             .map(p=>p.replace(/\n/g,' '))
+             .join('\n\n');
 }
 
 async function imageToMarkdownWithVision(base64, apiKey) {
   if (!apiKey) {
-    return [
-      '# OCR não habilitado',
-      '',
-      'Defina `GOOGLE_VISION_API_KEY` na Vercel para processar imagens.'
-    ].join('\n');
+    return '# OCR não habilitado. Defina GOOGLE_VISION_API_KEY na Vercel.';
   }
   const fetch = (await import('node-fetch')).default;
   const body = { requests: [{ image: { content: base64 }, features: [{ type: 'DOCUMENT_TEXT_DETECTION' }] }] };
-  const resp = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${encodeURIComponent(apiKey)}`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+  const r = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${encodeURIComponent(apiKey)}`, {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
   });
-  const json = await resp.json();
-  const text = json?.responses?.[0]?.fullTextAnnotation?.text || '';
+  const j = await r.json();
+  const text = j?.responses?.[0]?.fullTextAnnotation?.text || '';
   if (!text) return '# OCR não retornou texto';
-  return text.trim().replace(/\r/g, '').split('\n\n').map(s => s.trim()).filter(Boolean).join('\n\n');
+  return text.trim().replace(/\r/g,'').split('\n\n').map(s=>s.trim()).filter(Boolean).join('\n\n');
 }
 
 module.exports = { docxToMarkdown, pdfToMarkdown, imageToMarkdownWithVision };
