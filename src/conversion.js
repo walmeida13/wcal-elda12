@@ -16,8 +16,8 @@ async function pdfToMarkdown(buffer) {
     return [
       '# PDF sem texto extraível',
       '',
-      '> Parece digitalizado (imagem). Envie as páginas como PNG/JPG para OCR,',
-      '> ou depois ativamos o fluxo de OCR de PDF via GCS.'
+      '> Parece digitalizado (imagem). Envie páginas como PNG/JPG para OCR,',
+      '> ou ativamos depois o fluxo de OCR de PDF via GCS.'
     ].join('\n');
   }
   return text.replace(/\r/g,'')
@@ -28,9 +28,7 @@ async function pdfToMarkdown(buffer) {
 }
 
 async function imageToMarkdownWithVision(base64, apiKey) {
-  if (!apiKey) {
-    return '# OCR não habilitado. Defina GOOGLE_VISION_API_KEY na Vercel.';
-  }
+  if (!apiKey) return '# OCR não habilitado. Defina GOOGLE_VISION_API_KEY na Vercel.';
   const fetch = (await import('node-fetch')).default;
   const body = { requests: [{ image: { content: base64 }, features: [{ type: 'DOCUMENT_TEXT_DETECTION' }] }] };
   const r = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${encodeURIComponent(apiKey)}`, {
