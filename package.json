@@ -1,0 +1,18 @@
+{
+  "name": "wcal-elda12",
+  "version": "1.0.0",
+  "description": "Conversor de PDFs, DOCX e imagens para Markdown com OCR Google Vision",
+  "scripts": {
+    "start": "python -m app.server",
+    "test": "python -m unittest discover -s tests"
+  },
+  "keywords": [
+    "ocr",
+    "markdown",
+    "google vision",
+    "docx",
+    "pdf"
+  ],
+  "author": "",
+  "license": "MIT"
+}

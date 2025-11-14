@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WCAl+Elda · Conversor OCR para Markdown</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="container top-bar__content">
+        <div class="branding">
+          <div class="logo-circle">W</div>
+          <div>
+            <p class="branding__subtitle">WCAl+Elda</p>
+            <p class="branding__title">Unificador de Documentos</p>
+          </div>
+        </div>
+        <nav class="top-nav">
+          <a href="#recursos">Recursos</a>
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#resultado">Resultado</a>
+        </nav>
+        <button class="action-button">Começar</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero__content">
+          <div class="hero__text">
+            <p class="badge">Simplifique seus fluxos de trabalho</p>
+            <h1>Unifique seus documentos em <span>Markdown</span></h1>
+            <p class="hero__subtitle">
+              Converta e unifique vários arquivos PDF, DOCX e imagens em um único documento Markdown formatado e pronto para uso. Utilizamos OCR com Google Vision para garantir o melhor resultado.
+            </p>
+            <div class="cta-group">
+              <a class="action-button" href="#upload">Começar agora</a>
+              <button class="ghost-button" type="button" id="tour-button">Ver demonstração</button>
+            </div>
+          </div>
+          <div class="hero__card">
+            <div class="card__icon">⚡️</div>
+            <h2>Processamento inteligente</h2>
+            <p>
+              Upload simples, OCR confiável e unificação automática em Markdown. Tudo em uma única interface intuitiva.
+            </p>
+            <ul class="card__list">
+              <li>Compatível com PDF, DOCX e imagens</li>
+              <li>Google Vision OCR integrado</li>
+              <li>Download instantâneo do Markdown final</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="recursos" class="feature-cards">
+        <div class="container feature-grid">
+          <article class="feature">
+            <h3>Upload simples</h3>
+            <p>Carregue múltiplos arquivos PDF, DOCX ou imagens em um único passo.</p>
+          </article>
+          <article class="feature">
+            <h3>OCR inteligente</h3>
+            <p>Extração de texto com Google Vision, ideal para documentos digitalizados.</p>
+          </article>
+          <article class="feature">
+            <h3>Markdown pronto</h3>
+            <p>Receba um documento Markdown unificado, pronto para revisão ou publicação.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="upload" class="upload-section">
+        <div class="container">
+          <h2>Faça upload dos arquivos</h2>
+          <p class="section-subtitle">
+            Arraste e solte seus documentos ou clique para selecionar. Aceitamos PDF, DOCX e imagens (JPG, PNG).
+          </p>
+          <form id="upload-form" class="upload-form">
+            <div id="dropzone" class="dropzone">
+              <input id="file-input" type="file" name="files" multiple accept=".pdf,.docx,image/*" />
+              <div class="dropzone__content">
+                <div class="dropzone__icon">⬆️</div>
+                <p class="dropzone__title">Arraste e solte os arquivos aqui</p>
+                <p class="dropzone__hint">ou clique para selecionar</p>
+              </div>
+            </div>
+            <ul id="file-list" class="file-list"></ul>
+            <button id="process-button" class="action-button" type="submit">Converter para Markdown</button>
+          </form>
+          <p id="status-message" class="status-message" role="status"></p>
+        </div>
+      </section>
+
+      <section id="como-funciona" class="steps-section">
+        <div class="container steps-grid">
+          <div class="step">
+            <span class="step__badge">1</span>
+            <h3>Carregue</h3>
+            <p>Selecione todos os arquivos que deseja unificar.</p>
+          </div>
+          <div class="step">
+            <span class="step__badge">2</span>
+            <h3>Extraia</h3>
+            <p>O Google Vision executa o OCR automaticamente.</p>
+          </div>
+          <div class="step">
+            <span class="step__badge">3</span>
+            <h3>Unifique</h3>
+            <p>Receba um arquivo Markdown unificado para download.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultado" class="result-section">
+        <div class="container">
+          <div class="result-header">
+            <h2>Resultado em Markdown</h2>
+            <button id="download-button" class="ghost-button" type="button" disabled>Baixar Markdown</button>
+          </div>
+          <textarea id="result-markdown" class="result-text" rows="16" placeholder="O Markdown final aparecerá aqui." readonly></textarea>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__content">
+        <p>© 2025 WCAl+Elda · Unificador de Documentos. Todos os direitos reservados.</p>
+        <div class="footer__links">
+          <a href="#">Política de privacidade</a>
+          <a href="#">Termos de uso</a>
+        </div>
+      </div>
+    </footer>
+
+    <div id="tour-modal" class="modal" hidden>
+      <div class="modal__dialog">
+        <button id="modal-close" class="modal__close" type="button">×</button>
+        <h3>Como funciona</h3>
+        <ol>
+          <li>Faça upload de todos os documentos que deseja combinar.</li>
+          <li>O OCR do Google Vision converte cada página em texto legível.</li>
+          <li>O sistema organiza o resultado em um único arquivo Markdown.</li>
+        </ol>
+        <p>
+          Configure sua chave da API do Google Vision em <code>GOOGLE_VISION_API_KEY</code> para habilitar o OCR.
+        </p>
+      </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
