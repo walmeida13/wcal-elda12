@@ -4,17 +4,21 @@ const multer = require('multer');
 const { docxToMarkdown, pdfToMarkdown, imageToMarkdownWithVision } = require('./conversion');
 
 const app = express();
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
-app.get('/api/health', (req, res) => res.json({ ok: true, ts: Date.now(), app: 'wcal-elda12' }));
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, ts: Date.now(), app: 'wcal-elda12' });
+});
 
 app.post('/api/convert', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Envie um arquivo em "file".' });
+
     const mime = req.file.mimetype || '';
     const name = req.file.originalname || 'arquivo';
     let md = '';
