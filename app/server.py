@@ -137,14 +137,21 @@ class OCRRequestHandler(SimpleHTTPRequestHandler):
         buffer = BytesIO()
         while remainbytes > 0:
             line = self.rfile.readline()
-            remainbytes -= len(line)
-            if boundary in line:
+            if not line:
                 break
-            if line.endswith(b"\r\n"):
-                buffer.write(line[:-2])
-            else:
-                buffer.write(line)
-        return buffer.getvalue()
+            remainbytes -= len(line)
+            if line.startswith(boundary):
+                break
+            if boundary in line:
+                index = line.index(boundary)
+                buffer.write(line[:index])
+                break
+            buffer.write(line)
+
+        data = buffer.getvalue()
+        if data.endswith(b"\r\n"):
+            data = data[:-2]
+        return data
 
     def _discard_part(self, remainbytes: int, boundary: bytes) -> None:
         while remainbytes > 0:

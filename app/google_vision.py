@@ -8,15 +8,16 @@ from typing import Any, Dict, Optional
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-VISION_ENDPOINT = "https://vision.googleapis.com/v1/images:annotate"
+VISION_IMAGE_ENDPOINT = "https://vision.googleapis.com/v1/images:annotate"
+VISION_FILE_ENDPOINT = "https://vision.googleapis.com/v1/files:annotate"
 
 
 class VisionAPIError(RuntimeError):
     """Raised when Google Vision API returns an error response."""
 
 
-def build_request_payload(content: bytes, mime_type: str) -> Dict[str, Any]:
-    """Construct the JSON payload for Vision API document text detection."""
+def build_image_request_payload(content: bytes, mime_type: str) -> Dict[str, Any]:
+    """Construct the JSON payload for Vision API image OCR."""
     encoded = base64.b64encode(content).decode("utf-8")
     return {
         "requests": [
@@ -32,12 +33,32 @@ def build_request_payload(content: bytes, mime_type: str) -> Dict[str, Any]:
     }
 
 
+def build_file_request_payload(content: bytes, mime_type: str) -> Dict[str, Any]:
+    """Construct the JSON payload for Vision API file OCR (PDF/TIFF)."""
+    encoded = base64.b64encode(content).decode("utf-8")
+    return {
+        "requests": [
+            {
+                "inputConfig": {"content": encoded, "mimeType": mime_type},
+                "features": [{"type": "DOCUMENT_TEXT_DETECTION"}],
+            }
+        ]
+    }
+
+
 def extract_text(content: bytes, mime_type: str, api_key: str) -> str:
     """Send the request to Google Vision and return extracted text."""
-    payload = build_request_payload(content, mime_type)
+    normalized_mime = mime_type.lower()
+    if normalized_mime in {"application/pdf", "image/tiff"}:
+        payload = build_file_request_payload(content, normalized_mime)
+        endpoint = VISION_FILE_ENDPOINT
+    else:
+        payload = build_image_request_payload(content, normalized_mime)
+        endpoint = VISION_IMAGE_ENDPOINT
+
     data = json.dumps(payload).encode("utf-8")
     request = Request(
-        url=f"{VISION_ENDPOINT}?key={api_key}",
+        url=f"{endpoint}?key={api_key}",
         data=data,
         headers={"Content-Type": "application/json"},
         method="POST",
