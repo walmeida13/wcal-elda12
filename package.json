@@ -6,5 +6,8 @@
     "dev": "node src/server.js",
     "start": "node src/server.js",
     "test": "echo \"(sem testes por enquanto)\" && exit 0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
   }
 }
