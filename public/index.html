@@ -19,7 +19,9 @@
   <div class="box">
     <img src="logo.svg?v=4" alt="WcAl EldA" width="160" />
     <h1>wcal-elda12</h1>
-    <p>Conversor PDF/DOCX → Markdown</p>
-  </div>
-</body>
-</html>
+    <form id="f" method="post" action="/api/convert" enctype="multipart/form-data">
+  <input type="file" name="file" required />
+  <button type="submit">Converter → Markdown</button>
+</form>
+<p><small>Suporta DOCX e PDFs com texto; imagens via OCR se houver `GOOGLE_VISION_API_KEY`.</small></p>
+
